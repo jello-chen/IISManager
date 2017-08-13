@@ -30,8 +30,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.Web.Administration, Version=7.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.DirectoryServices" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -40,7 +42,26 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BaseController.cs" />
+    <Compile Include="Domain\AppPoolIdentityType.cs" />
+    <Compile Include="Domain\AppPoolState.cs" />
+    <Compile Include="Domain\IISAppPoolInfo.cs" />
+    <Compile Include="Domain\IISResultInfo.cs" />
+    <Compile Include="Domain\IISSiteInfo.cs" />
+    <Compile Include="Domain\IISStartInfo.cs" />
+    <Compile Include="Domain\IISVersion.cs" />
+    <Compile Include="Domain\SiteApplicationInfo.cs" />
+    <Compile Include="Extensions\ObjectExtensions.cs" />
+    <Compile Include="Extensions\StringExtensions.cs" />
+    <Compile Include="Helper\ConvertHelper.cs" />
+    <Compile Include="Helper\IISHelper.cs" />
+    <Compile Include="IController.cs" />
+    <Compile Include="IIS6Controller.cs" />
+    <Compile Include="IIS7Controller.cs" />
+    <Compile Include="IISController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Domain\ServerState.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
