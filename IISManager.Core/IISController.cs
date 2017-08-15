@@ -4,7 +4,7 @@ namespace IISManager.Core
 {
     public class IISController
     {
-        public static IController GetControl()
+        public static IController GetController()
         {
             if (IISHelper.IsIIS7AndHigher())
             {
@@ -12,7 +12,7 @@ namespace IISManager.Core
             }
             return new IIS6Controller();
         }
-        public static IController GetControl(bool IsIIS7AndHigher)
+        public static IController GetController(bool IsIIS7AndHigher)
         {
             if (IsIIS7AndHigher)
             {

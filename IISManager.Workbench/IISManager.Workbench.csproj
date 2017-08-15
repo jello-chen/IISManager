@@ -79,6 +79,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Common\ModelBuilder.cs" />
     <Compile Include="Modules\HomeModule.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -90,7 +91,22 @@
     <None Include="app.manifest">
       <SubType>Designer</SubType>
     </None>
+    <None Include="Content\Fonts\fontawesome-webfont.eot" />
+    <None Include="Content\Fonts\fontawesome-webfont.ttf" />
+    <None Include="Content\Fonts\fontawesome-webfont.woff" />
+    <None Include="Content\Fonts\fontawesome-webfont.woff2" />
+    <None Include="Content\Fonts\FontAwesome.otf" />
+    <None Include="Content\Fonts\glyphicons-halflings-regular.eot" />
+    <None Include="Content\Fonts\glyphicons-halflings-regular.ttf" />
+    <None Include="Content\Fonts\glyphicons-halflings-regular.woff" />
+    <None Include="Content\Fonts\glyphicons-halflings-regular.woff2" />
     <None Include="packages.config" />
+    <Content Include="Content\Fonts\fontawesome-webfont.svg" />
+    <Content Include="Content\Fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="Content\Scripts\bootstrap-contextmenu.js" />
+    <Content Include="Content\Scripts\bootstrap-treeview.js" />
+    <Content Include="Content\Scripts\bootstrap.min.js" />
+    <Content Include="Content\Scripts\jquery.js" />
     <Content Include="Content\Styles\bootstrap-treeview.css" />
     <Content Include="Content\Styles\bootstrap.min.css" />
     <Content Include="Views\Home\Index.cshtml" />

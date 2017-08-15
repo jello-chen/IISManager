@@ -10,9 +10,9 @@ namespace IISManager.Core.Domain
 
         public bool Success => ErrorCode == 0;
 
-        public IISResultInfo SetError(string msg, int errorCode = 1)
+        public IISResultInfo SetError(string message, int errorCode = 1)
         {
-            Message = msg;
+            Message = message;
             ErrorCode = errorCode;
             return this;
         }

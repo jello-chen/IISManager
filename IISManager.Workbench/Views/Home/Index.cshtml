@@ -8,8 +8,59 @@
     <meta name="author" content="">
     <title>IIS Manager Workbench</title>
     <link rel="SHORTCUT ICON" href="/Content/Images/favicon.ico" />
+    <link href="/Content/Styles/bootstrap.min.css" rel="stylesheet" />
+    <link href="/Content/Styles/bootstrap-treeview.css" rel="stylesheet" />
 </head>
 <body>
-    Hello, IIS
+    <div class="container">
+        <h1>IIS Manager Workbench</h1>
+        <br />
+        <div class="row">
+            <div class="col-sm-12">
+                <div id="context" data-toggle="context" data-target="#context-menu">
+                    <label for="treeview"></label>
+                    <div id="treeview" />
+                </div>
+                <div id="context-menu">
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a tabindex="-1" href="#">Action</a></li>
+                        <li><a tabindex="-1" href="#">Separated link</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="/Content/Scripts/jquery.js"></script>
+    <script src="/Content/Scripts/bootstrap-treeview.js"></script>
+    <script src="/Content/Scripts/bootstrap-contextmenu.js"></script>
+    <script type="text/javascript">
+
+        function buildDomTree() {
+
+            var data = [];
+
+            $.ajax({
+                url: '/GetAllIISInfos',
+                type: 'GET',
+                async: false,
+                success: function (result) {
+                    data = result || [];
+                }
+            })
+            
+            return data;
+        }
+
+        $(function () {
+            var options = {
+                bootstrap2: false,
+                showTags: true,
+                levels: 5,
+                data: buildDomTree()
+            };
+            $('#treeview').treeview(options);
+
+        });
+    </script>
 </body>
 </html>
