@@ -14,6 +14,7 @@ namespace IISManager.Workbench
         public void Start()
         {
             webApp = WebApp.Start("http://localhost:6060");
+            Console.WriteLine("Web host start at http://localhost:6060.");
         }
 
         public void Stop()

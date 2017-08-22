@@ -12,55 +12,30 @@
     <link href="/Content/Styles/bootstrap-treeview.css" rel="stylesheet" />
 </head>
 <body>
-    <div class="container">
-        <h1>IIS Manager Workbench</h1>
+    <div id="container" class="container">
+        <h1>{{title}}</h1>
         <br />
         <div class="row">
             <div class="col-sm-12">
-                <div id="context" data-toggle="context" data-target="#context-menu">
+                <div id="context" data-toggle="context">
                     <label for="treeview"></label>
-                    <div id="treeview" />
+                    <div id="treeview"></div>
                 </div>
                 <div id="context-menu">
                     <ul class="dropdown-menu" role="menu">
-                        <li><a tabindex="-1" href="#">Action</a></li>
-                        <li><a tabindex="-1" href="#">Separated link</a></li>
+                        <li v-if="cm.status == 3 || cm.status == 4"><a data-operation="start" tabindex="-1" href="javascript:void(0)"><span class="glyphicon glyphicon-play" aria-hidden="true"></span> Start</a></li>
+                        <li v-if="cm.status == 1 || cm.status == 2"><a data-operation="stop" tabindex="-1" href="javascript:void(0)"><span class="glyphicon glyphicon-stop" aria-hidden="true"></span> Stop</a></li>
+                        <li class="divider"></li>
+                        <li><a tabindex="-1" href="#">Properties</a></li>
                     </ul>
                 </div>
             </div>
         </div>
     </div>
     <script src="/Content/Scripts/jquery.js"></script>
+    <script src="/Content/Scripts/vue.js"></script>
     <script src="/Content/Scripts/bootstrap-treeview.js"></script>
     <script src="/Content/Scripts/bootstrap-contextmenu.js"></script>
-    <script type="text/javascript">
-
-        function buildDomTree() {
-
-            var data = [];
-
-            $.ajax({
-                url: '/GetAllIISInfos',
-                type: 'GET',
-                async: false,
-                success: function (result) {
-                    data = result || [];
-                }
-            })
-            
-            return data;
-        }
-
-        $(function () {
-            var options = {
-                bootstrap2: false,
-                showTags: true,
-                levels: 5,
-                data: buildDomTree()
-            };
-            $('#treeview').treeview(options);
-
-        });
-    </script>
+    <script src="/Content/Scripts/Home/Index.js"></script>
 </body>
 </html>

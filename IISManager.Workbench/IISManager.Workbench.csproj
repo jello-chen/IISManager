@@ -106,7 +106,9 @@
     <Content Include="Content\Scripts\bootstrap-contextmenu.js" />
     <Content Include="Content\Scripts\bootstrap-treeview.js" />
     <Content Include="Content\Scripts\bootstrap.min.js" />
+    <Content Include="Content\Scripts\Home\Index.js" />
     <Content Include="Content\Scripts\jquery.js" />
+    <Content Include="Content\Scripts\vue.js" />
     <Content Include="Content\Styles\bootstrap-treeview.css" />
     <Content Include="Content\Styles\bootstrap.min.css" />
     <Content Include="Views\Home\Index.cshtml" />
