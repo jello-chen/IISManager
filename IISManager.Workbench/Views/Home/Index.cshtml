@@ -9,7 +9,9 @@
     <title>IIS Manager Workbench</title>
     <link rel="SHORTCUT ICON" href="/Content/Images/favicon.ico" />
     <link href="/Content/Styles/bootstrap.min.css" rel="stylesheet" />
-    <link href="/Content/Styles/bootstrap-treeview.css" rel="stylesheet" />
+    @*<link href="/Content/Styles/bootstrap-treeview.css" rel="stylesheet" />*@
+    <link href="/Content/Styles/fileinput.min.css" rel="stylesheet" />
+    <link href="/Content/Styles/jquery.terminal.css" rel="stylesheet" />
 </head>
 <body>
     <div id="container" class="container">
@@ -17,25 +19,35 @@
         <br />
         <div class="row">
             <div class="col-sm-12">
-                <div id="context" data-toggle="context">
-                    <label for="treeview"></label>
-                    <div id="treeview"></div>
-                </div>
-                <div id="context-menu">
-                    <ul class="dropdown-menu" role="menu">
-                        <li v-if="cm.status == 3 || cm.status == 4"><a data-operation="start" tabindex="-1" href="javascript:void(0)"><span class="glyphicon glyphicon-play" aria-hidden="true"></span> Start</a></li>
-                        <li v-if="cm.status == 1 || cm.status == 2"><a data-operation="stop" tabindex="-1" href="javascript:void(0)"><span class="glyphicon glyphicon-stop" aria-hidden="true"></span> Stop</a></li>
-                        <li class="divider"></li>
-                        <li><a tabindex="-1" href="#">Properties</a></li>
-                    </ul>
+                @*<div id="context" data-toggle="context">
+                        <label for="treeview"></label>
+                        <div id="treeview"></div>
+                    </div>
+                    <div id="context-menu">
+                        <ul class="dropdown-menu" role="menu">
+                            <li v-if="cm.status == 3 || cm.status == 4"><a data-operation="start" tabindex="-1" href="javascript:void(0)"><span class="glyphicon glyphicon-play" aria-hidden="true"></span> Start</a></li>
+                            <li v-if="cm.status == 1 || cm.status == 2"><a data-operation="stop" tabindex="-1" href="javascript:void(0)"><span class="glyphicon glyphicon-stop" aria-hidden="true"></span> Stop</a></li>
+                            <li class="divider"></li>
+                            <li><a tabindex="-1" href="#">Properties</a></li>
+                        </ul>
+                    </div>*@
+                <div class="form-group">
+                    @*<label class="control-label">Select File</label>*@
+                    <input id="uploader" type="file" class="file-loading" multiple data-show-preview="false">
+                    <div id="terminal" style="margin-top:10px;height:500px;border-radius:4px;"></div>
                 </div>
             </div>
         </div>
     </div>
     <script src="/Content/Scripts/jquery.js"></script>
     <script src="/Content/Scripts/vue.js"></script>
-    <script src="/Content/Scripts/bootstrap-treeview.js"></script>
-    <script src="/Content/Scripts/bootstrap-contextmenu.js"></script>
+    @*<script src="/Content/Scripts/bootstrap-treeview.js"></script>
+        <script src="/Content/Scripts/bootstrap-contextmenu.js"></script>*@
+    <script src="/Content/Scripts/fileinput.min.js"></script>
+    <script src="/Content/Scripts/jquery.mousewheel-min.js"></script>
+    <script src="/Content/Scripts/jquery.terminal.min.js"></script>
+    <script src="/Content/Scripts/jquery.signalR-2.2.3.min.js"></script>
+    <script src="/signalr/hubs"></script>
     <script src="/Content/Scripts/Home/Index.js"></script>
 </body>
 </html>

@@ -1,6 +1,8 @@
-﻿using Microsoft.Owin.Hosting;
+﻿using IISManager.Core;
+using Microsoft.Owin.Hosting;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,8 +15,9 @@ namespace IISManager.Workbench
 
         public void Start()
         {
-            webApp = WebApp.Start("http://localhost:6060");
-            Console.WriteLine("Web host start at http://localhost:6060.");
+            string url = Globals.Url;
+            webApp = WebApp.Start(url);
+            Console.WriteLine($"Web host start at {url}.");
         }
 
         public void Stop()

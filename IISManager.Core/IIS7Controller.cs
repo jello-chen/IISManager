@@ -15,23 +15,24 @@ namespace IISManager.Core
             var list = new List<IISAppPoolInfo>();
             try
             {
-                var iisManager = new ServerManager();
-                foreach (var item in iisManager.ApplicationPools)
+                using (var iisManager = new ServerManager())
                 {
-                    list.Add(new IISAppPoolInfo()
+                    foreach (var item in iisManager.ApplicationPools)
                     {
-                        Name = item.Name,
-                        Enable32BitAppOnWin64 = item.Enable32BitAppOnWin64,
-                        ManagedRuntimeVersion = item.ManagedRuntimeVersion,
-                        State = (AppPoolState)((int)item.State),
-                        AppPoolAutoStart = item.AutoStart,
-                        //WorkerProcessesCount = item.WorkerProcesses.LongCount(),
-                        // MaxProcessesCount = item.ProcessModel.MaxProcesses,
-                        IdentityType = item.ProcessModel.IdentityType.ToString().ToEnum<AppPoolIdentityType>(),
-                        AnonymousUserName = item.ProcessModel.UserName
-                    });
+                        list.Add(new IISAppPoolInfo()
+                        {
+                            Name = item.Name,
+                            Enable32BitAppOnWin64 = item.Enable32BitAppOnWin64,
+                            ManagedRuntimeVersion = item.ManagedRuntimeVersion,
+                            State = (AppPoolState)((int)item.State),
+                            AppPoolAutoStart = item.AutoStart,
+                            //WorkerProcessesCount = item.WorkerProcesses.LongCount(),
+                            //MaxProcessesCount = item.ProcessModel.MaxProcesses,
+                            IdentityType = item.ProcessModel.IdentityType.ToString().ToEnum<AppPoolIdentityType>(),
+                            AnonymousUserName = item.ProcessModel.UserName
+                        });
+                    }
                 }
-                iisManager.Dispose();
                 data.Data = list;
             }
             catch (Exception e)
@@ -57,7 +58,7 @@ namespace IISManager.Core
                             Name = item.Name,
                             ID = item.Id,
                             ServerAutoStart = item.ServerAutoStart,
-                            ServerBindings = string.Join(",", item.Bindings.Cast<Binding>().Select(p => ":{0}:{1}".FormatWith(p.EndPoint.Port, p.Host))),
+                            ServerBindings = string.Join(",", item.Bindings.Cast<Binding>().Where(p => p.Protocol.StartsWith("http", StringComparison.InvariantCultureIgnoreCase)).Select(p => ":{0}:{1}".FormatWith(p.EndPoint.Port, p.Host))),
                             DefaultDoc = string.Join(",", item.GetWebConfiguration().GetSection("system.webServer/defaultDocument").GetCollection("files").Select(p => p["value"])),
                             State = item.State.ToServerState(),
                             Applications = new List<SiteApplicationInfo>(
@@ -65,6 +66,7 @@ namespace IISManager.Core
                                     new SiteApplicationInfo()
                                     {
                                         Path = p.Path.TrimStart('/'),
+                                        PhysicalPath = p.VirtualDirectories["/"].PhysicalPath,
                                         PoolName = p.ApplicationPoolName
                                     })),
                         });
@@ -160,7 +162,7 @@ namespace IISManager.Core
                     var appPool = iisManager.ApplicationPools.FirstOrDefault(p => p.Name == appPoolName);
                     if (appPool == null)
                     {
-                        return data.SetError("appPool not found", 404);
+                        return data.SetError("Application pool is not found", 404);
                     }
                     switch (appPool.State)
                     {

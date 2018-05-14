@@ -15,7 +15,7 @@ namespace IISManager.Workbench.Common
             var controller = IISController.GetController();
 
             var appPools = controller.GetAllPoolInfos();
-            var appPoolNode = new IISTreeNode { Id = -2, Text = "Application Pools", HasContextMenu = false, Nodes = new List<IISTreeNode>() };
+            var appPoolNode = new IISTreeNode { Id = -2, Text = "Application Pools", State = new { Expanded = false }, HasContextMenu = false, Nodes = new List<IISTreeNode>() };
             appPoolNode.Nodes.AddRange(appPools.Data.Select((a, i) => new IISTreeNode { Id = appPoolNode.Id - i - 1, Text = a.Name, HasContextMenu = false }));
             rootNode.Nodes.Add(appPoolNode);
 
@@ -33,6 +33,8 @@ namespace IISManager.Workbench.Common
     {
         public long Id { get; set; }
         public string Text { get; set; }
+        public string Icon { get; set; }
+        public dynamic State { get; set; }
         public bool IsSite { get; set; }
         public int Status { get; set; }
         public bool HasContextMenu { get; set; }
