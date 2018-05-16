@@ -4,6 +4,6 @@ namespace IISManager.Core
 {
     public interface IOperation
     {
-        bool Execute(Operation context);
+        string Execute(Operation context);
     }
 }

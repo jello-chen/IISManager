@@ -9,59 +9,66 @@ namespace IISManager.Core
     public class ReplaceOperation : OperationBase
     {
         public ReplaceOperation(Publish publish) : base(publish) { }
-        public override bool Execute(Operation context)
+        public override string Execute(Operation context)
         {
             string tp = Path.Combine(RootPath, context.Target);
             string sp = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, context.Src);
             if (context.IsConfig)
             {
-                XmlDocument srcDoc = new XmlDocument();
-                XmlDocument targetDoc = new XmlDocument();
-                srcDoc.Load(sp);
-                targetDoc.Load(tp);
-
-                string[] paths = context.Path.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
-                foreach (var path in paths)
+                try
                 {
-                    XmlNode sNode = srcDoc.SelectSingleNode(path);
-                    if (sNode == null) continue;
-                    XmlElement newNode = targetDoc.CreateElement(sNode.Name);
-                    foreach (XmlAttribute attr in sNode.Attributes)
+                    XmlDocument srcDoc = new XmlDocument();
+                    XmlDocument targetDoc = new XmlDocument();
+                    srcDoc.Load(sp);
+                    targetDoc.Load(tp);
+
+                    string[] paths = context.Path.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
+                    foreach (var path in paths)
                     {
-                        newNode.SetAttribute(attr.Name, attr.Value);
-                    }
-                    XmlNode tNode = targetDoc.SelectSingleNode(path);
-                    string parentPath = path.Substring(0, path.LastIndexOf('/'));
-                    XmlNode pNode = targetDoc.SelectSingleNode(parentPath);
-                    if (tNode == null)
-                    {
-                        if (context.AutoAdd)
+                        XmlNode sNode = srcDoc.SelectSingleNode(path);
+                        if (sNode == null) continue;
+                        XmlElement newNode = targetDoc.CreateElement(sNode.Name);
+                        foreach (XmlAttribute attr in sNode.Attributes)
                         {
-                            pNode.AppendChild(newNode);
+                            newNode.SetAttribute(attr.Name, attr.Value);
+                        }
+                        XmlNode tNode = targetDoc.SelectSingleNode(path);
+                        string parentPath = path.Substring(0, path.LastIndexOf('/'));
+                        XmlNode pNode = targetDoc.SelectSingleNode(parentPath);
+                        if (tNode == null)
+                        {
+                            if (context.AutoAdd)
+                            {
+                                pNode.AppendChild(newNode);
+                            }
+                        }
+                        else
+                        {
+                            pNode.ReplaceChild(newNode, tNode);
                         }
                     }
-                    else
-                    {
-                        pNode.ReplaceChild(newNode, tNode);
-                    }
+                    targetDoc.Save(tp);
+                    return string.Empty;
                 }
-                targetDoc.Save(tp);
-                return true;
+                catch (Exception ex)
+                {
+                    return ex.Message;
+                }
             }
             else
             {
-                if (string.IsNullOrWhiteSpace(context.Exclude))
-                {
-                    string cmd = $"XCOPY {sp} {tp} /S /E /Y";
-                    return CmdUtil.RunCmd(cmd);
-                }
-                else
-                {
-                    return CmdUtil.RunCmd($"ECHO {context.Exclude} > EXCLUDE.TXT") &
-                           CmdUtil.RunCmd($"XCOPY {sp} {tp} /S /E /Y /EXCLUDE:EXCLUDE.TXT") &
-                           CmdUtil.RunCmd("DEL EXCLUDE.TXT");
-                }
-
+                //if (string.IsNullOrWhiteSpace(context.Exclude))
+                //{
+                //    string cmd = $"XCOPY {sp} {tp} /S /E /Y";
+                //    return CmdUtil.RunCmd(cmd);
+                //}
+                //else
+                //{
+                //    return CmdUtil.RunCmd($"ECHO {context.Exclude} > EXCLUDE.TXT") &
+                //           CmdUtil.RunCmd($"XCOPY {sp} {tp} /S /E /Y /EXCLUDE:EXCLUDE.TXT") &
+                //           CmdUtil.RunCmd("DEL EXCLUDE.TXT");
+                //}
+                return IoUtil.CopyDirectory(sp, tp, ignoreFunc: f => f == context.Exclude);
             }
         }
     }

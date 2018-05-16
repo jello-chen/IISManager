@@ -8,12 +8,11 @@ namespace IISManager.Core
     public class BackupOperation : OperationBase
     {
         public BackupOperation(Publish publish) : base(publish){}
-        public override bool Execute(Operation context)
+        public override string Execute(Operation context)
         {
             string previousVersion = Publish.Version.Previous;
             string wp = Path.Combine(RootPath, Globals.WEB_ROOT);
-            ZipUtil.Zip(wp, Path.Combine(RootPath, previousVersion + ".zip"));
-            return true;
+            return ZipUtil.Zip(wp, Path.Combine(RootPath, previousVersion + ".zip"));
         }
     }
 }

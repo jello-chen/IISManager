@@ -1,4 +1,5 @@
 ﻿using IISManager.Core.Configuration;
+using System;
 using System.IO;
 
 namespace IISManager.Core
@@ -6,21 +7,33 @@ namespace IISManager.Core
     public class DeleteOperation : OperationBase
     {
         public DeleteOperation(Publish publish) : base(publish) { }
-        public override bool Execute(Operation context)
+        public override string Execute(Operation context)
         {
-            if (string.IsNullOrEmpty(context.Path)) return false;
+            if (string.IsNullOrEmpty(context.Path)) return string.Empty;
             string fullPath = Path.Combine(RootPath, context.Path);
             if (Directory.Exists(fullPath))
             {
-                Directory.Delete(fullPath, true);
-                return true;
+                try
+                {
+                    Directory.Delete(fullPath, true);
+                }
+                catch (Exception ex)
+                {
+                    return ex.Message;
+                }
             }
             if (File.Exists(fullPath))
             {
-                File.Delete(fullPath);
-                return true;
+                try
+                {
+                    File.Delete(fullPath);
+                }
+                catch (Exception ex)
+                {
+                    return ex.Message;
+                }
             }
-            return false;
+            return string.Empty;
         }
     }
 }

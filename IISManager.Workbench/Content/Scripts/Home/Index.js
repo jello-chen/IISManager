@@ -117,9 +117,10 @@ function initializeSignalr() {
     publishHub.client.send = function (message, success) {
         console.log(message, success);
         if ($terminal != null) {
+            var color = success == true ? "green" : "red";
             $terminal.echo(message, {
                 finalize: function (div) {
-                    div.css("color", "green");
+                    div.css("color", color);
                 }
             });
         }

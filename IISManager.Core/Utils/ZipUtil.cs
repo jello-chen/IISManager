@@ -31,7 +31,7 @@ namespace IISManager.Core.Utils
             }
         }
 
-        public static bool UnZip(string src, string destination, bool ExtractFullPath = true, bool Overwrite = true, bool PreserveFileTime = true, bool isDirectory = false)
+        public static string UnZip(string src, string destination, bool ExtractFullPath = true, bool Overwrite = true, bool PreserveFileTime = true, bool isDirectory = false)
         {
             try
             {
@@ -44,11 +44,11 @@ namespace IISManager.Core.Utils
                             entry.WriteToDirectory(destination, options);
                     }
                 }
-                return true;
+                return string.Empty;
             }
-            catch
+            catch(Exception ex)
             {
-                return false;
+                return ex.Message;
             }
         }
 
@@ -73,7 +73,7 @@ namespace IISManager.Core.Utils
             }
         }
 
-        public static bool Zip(string src, string savePath)
+        public static string Zip(string src, string savePath)
         {
             try
             {
@@ -85,11 +85,11 @@ namespace IISManager.Core.Utils
                         archive.SaveTo(stream);
                     }
                 }
-                return true;
+                return string.Empty;
             }
             catch (Exception ex)
             {
-                return false;
+                return ex.Message;
             }
         }
 

@@ -9,6 +9,6 @@ namespace IISManager.Core
         protected Publish Publish { get; }
         protected OperationBase() { }
         protected OperationBase(Publish publish) => Publish = publish;
-        public abstract bool Execute(Operation context);
+        public abstract string Execute(Operation context);
     }
 }

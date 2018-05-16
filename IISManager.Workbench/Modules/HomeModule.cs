@@ -81,8 +81,14 @@ namespace IISManager.Workbench.Modules
                 {
                     Operation op = publish.Operations[i - 1];
                     IOperation operation = GetOperation(op.Type, publish);
-                    bool success = operation.Execute(op);
-                    GlobalHost.ConnectionManager.GetHubContext<PublishHub>()?.Clients.All.Send(GetOperationMessage(op, publish, i, count), success);
+                    string result = operation.Execute(op);
+                    bool success = string.IsNullOrWhiteSpace(result);
+                    GlobalHost.ConnectionManager.GetHubContext<PublishHub>()?.Clients.All.Send(GetOperationMessage(op, publish, i, count, success), success);
+                    if (!success)
+                    {
+                        GlobalHost.ConnectionManager.GetHubContext<PublishHub>()?.Clients.All.Send(result, success);
+                        break;
+                    }
                 }
             }
             return true;
@@ -95,10 +101,10 @@ namespace IISManager.Workbench.Modules
             return (IOperation)Activator.CreateInstance(type, publish);
         }
 
-        private string GetOperationMessage(Operation op, Publish publish, int i, int count)
+        private string GetOperationMessage(Operation op, Publish publish, int i, int count, bool success)
         {
             string message = string.Empty;
-            string format = "{0} finished, process: " + i.ToString() + "/" + count.ToString();
+            string format = "{0} "+(success ? "finished" : "failed") +", process: " + i.ToString() + "/" + count.ToString();
             switch (op.Type)
             {
                 case OperationType.Revert:
