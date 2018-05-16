@@ -18,6 +18,8 @@ namespace IISManager.Core.Configuration
 
         [XmlArray("scripts")]
         public List<Script> Scripts { get; set; }
+        [XmlArray("rollbackScripts")]
+        public List<Script> RollbackScripts { get; set; }
 
         [XmlAttribute("isConfig")]
         public bool IsConfig { get; set; }

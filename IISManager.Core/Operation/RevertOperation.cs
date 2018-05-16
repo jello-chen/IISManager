@@ -13,7 +13,9 @@ namespace IISManager.Core
             string revertVersionPath = Path.Combine(RootPath, revertVersion + ".zip");
             if (!File.Exists(revertVersionPath)) return $"Reverting {revertVersionPath} is not found.";
             string currentVersionDirectory = Path.Combine(RootPath, Globals.WEB_ROOT);
-            return ZipUtil.UnZip(revertVersionPath, currentVersionDirectory);
+            string result = ZipUtil.UnZip(revertVersionPath, currentVersionDirectory);
+            if (!string.IsNullOrWhiteSpace(result)) return result;
+            return new ExecuteOperation(Publish).ExecuteScript(context.RollbackScripts);
         }
     }
 }

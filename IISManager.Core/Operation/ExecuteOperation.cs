@@ -1,5 +1,4 @@
 ﻿using IISManager.Core.Configuration;
-using IISManager.Core.Utils;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
@@ -8,7 +7,6 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Xml;
-using System.Threading;
 using System.Collections.Concurrent;
 
 namespace IISManager.Core
@@ -19,17 +17,8 @@ namespace IISManager.Core
         public ExecuteOperation(Publish publish) : base(publish) { }
         public override string Execute(Operation context)
         {
-            ConcurrentBag<string> results = new ConcurrentBag<string>();
             List<Script> scripts = context.Scripts;
-            Task.WaitAll(scripts.Select(s => Task.Run(() =>
-            {
-                string sp = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, s.Path);
-                string cs = regex.IsMatch(s.Database) ? s.Database : GetConnectionStringFromConfig(s.Database);
-                string result = ExecuteScript(cs, sp);
-                if (!string.IsNullOrWhiteSpace(result))
-                    results.Add(result);
-            })).ToArray());
-            return results.Count == 0 ? string.Empty : string.Join("\n", results);
+            return ExecuteScript(scripts);
         }
 
         private string GetConnectionStringFromConfig(string path)
@@ -41,6 +30,21 @@ namespace IISManager.Core
             xmlDocument.Load(config);
             XmlNode csn = xmlDocument.SelectSingleNode(slices[1]);
             return csn.Attributes["connectionString"].Value;
+        }
+
+        internal string ExecuteScript(List<Script> scripts)
+        {
+            if (scripts == null || scripts.Count == 0) return string.Empty;
+            ConcurrentBag<string> results = new ConcurrentBag<string>();
+            Task.WaitAll(scripts.Select(s => Task.Run(() =>
+            {
+                string sp = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, s.Path);
+                string cs = regex.IsMatch(s.Database) ? s.Database : GetConnectionStringFromConfig(s.Database);
+                string result = ExecuteScript(cs, sp);
+                if (!string.IsNullOrWhiteSpace(result))
+                    results.Add(result);
+            })).ToArray());
+            return results.Count == 0 ? string.Empty : string.Join("\n", results);
         }
 
         private string ExecuteScript(string cs, string scriptFile)

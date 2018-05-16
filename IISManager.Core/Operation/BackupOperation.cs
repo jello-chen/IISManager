@@ -1,7 +1,6 @@
 ﻿using IISManager.Core.Configuration;
 using IISManager.Core.Utils;
 using System.IO;
-using System.Linq;
 
 namespace IISManager.Core
 {
