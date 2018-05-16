@@ -91,6 +91,7 @@
   <ItemGroup>
     <Compile Include="Common\ModelBuilder.cs" />
     <Compile Include="Hubs\PublishHub.cs" />
+    <Compile Include="Modules\ApiModule.cs" />
     <Compile Include="Modules\HomeModule.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
