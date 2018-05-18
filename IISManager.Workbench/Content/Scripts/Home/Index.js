@@ -43,27 +43,73 @@ function initializeTermimal() {
             term.push(function (command, term) {
                 if (command == 'help') {
                     term.echo('available api are get-versions');
-                } else if (command == 'get-versions') {
-                    term.pause();
-                    $.ajax({
-                        url: '/Api/GetVersions',
-                        type: 'GET',
-                        dataType: 'text',
-                        success: function (data) {
-                            term.resume();
-                            term.echo(data);
-                        },
-                        error: function (xhr, status, e) {
-                            term.resume();
-                            term.echo(data, {
+                } else {
+                    var cmd = $.terminal.parse_command(command);
+                    if (cmd.name == 'get-versions') {
+                        term.pause();
+                        $.ajax({
+                            url: '/Api/GetVersions',
+                            type: 'GET',
+                            dataType: 'text',
+                            success: function (data) {
+                                term.resume();
+                                term.echo(data);
+                            },
+                            error: function (xhr, status, e) {
+                                term.resume();
+                                term.echo(e, {
+                                    finalize: function (div) {
+                                        div.css("color", "red");
+                                    }
+                                });
+                            }
+                        });
+                    } else if (cmd.name == 'backup-version') {
+                        if (cmd.args.length != 1) {
+                            term.echo('The command parameter is not compatible', {
                                 finalize: function (div) {
                                     div.css("color", "red");
                                 }
                             });
                         }
-                    });
-                } else {
-                    term.echo('unknown api ' + command);
+                        else {
+                            term.pause();
+                            var version = cmd.args[0];
+                            $.ajax({
+                                url: '/Api/Backup',
+                                type: 'POST',
+                                dataType: 'text',
+                                data: { Version: version },
+                                success: function (data) {
+                                    term.resume();
+                                    if (data == '') {
+                                        term.echo('backup-version ' + version + ' finished.', {
+                                            finalize: function (div) {
+                                                div.css("color", "green");
+                                            }
+                                        });
+                                    }
+                                    else {
+                                        term.echo(data, {
+                                            finalize: function (div) {
+                                                div.css("color", "red");
+                                            }
+                                        });
+                                    }
+                                },
+                                error: function (xhr, status, e) {
+                                    term.resume();
+                                    term.echo(e, {
+                                        finalize: function (div) {
+                                            div.css("color", "red");
+                                        }
+                                    });
+                                }
+                            });
+                        }
+                    } else {
+                        term.echo('unknown api ' + command);
+                    }
                 }
             }, {
                     prompt: 'api> ',
