@@ -6,11 +6,17 @@ namespace IISManager.Core
 {
     public class DeleteOperation : OperationBase
     {
+        public DeleteOperation() { }
         public DeleteOperation(Publish publish) : base(publish) { }
         public override string Execute(Operation context)
         {
             if (string.IsNullOrEmpty(context.Path)) return string.Empty;
-            string fullPath = Path.Combine(RootPath, context.Path);
+            return Execute(context.Path);
+        }
+
+        public string Execute(string path)
+        {
+            string fullPath = Path.Combine(RootPath, path);
             if (Directory.Exists(fullPath))
             {
                 try

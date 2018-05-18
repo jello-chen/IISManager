@@ -16,6 +16,7 @@ namespace IISManager.Workbench.Modules
         {
             Get["/GetVersions", true] = async (_, ct) => await GetVersions();
             Post["/Backup", true] = async (_, ct) => await Backup();
+            Post["/Delete", true] = async (_, ct) => await Delete();
         }
 
         private Task<string> GetVersions()
@@ -44,10 +45,24 @@ namespace IISManager.Workbench.Modules
             BackupOperation backupOperation = new BackupOperation();
             return await Task.FromResult(backupOperation.Execute(version));
         }
+
+        private async Task<string> Delete()
+        {
+            var parameter = this.Bind<DeleteModel>();
+            var path = parameter.Path;
+            if (string.IsNullOrWhiteSpace(path))
+                return "not a specified path";
+            DeleteOperation deleteOperation = new DeleteOperation();
+            return await Task.FromResult(deleteOperation.Execute(path));
+        }
     }
 
     public class BackupModel
     {
         public string Version { get; set; }
+    }
+    public class DeleteModel
+    {
+        public string Path { get; set; }
     }
 }

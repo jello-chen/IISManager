@@ -107,6 +107,49 @@ function initializeTermimal() {
                                 }
                             });
                         }
+                    } else if (cmd.name == 'delete') {
+                        if (cmd.args.length != 1) {
+                            term.echo('The command parameter is not compatible', {
+                                finalize: function (div) {
+                                    div.css("color", "red");
+                                }
+                            });
+                        }
+                        else {
+                            term.pause();
+                            var version = cmd.args[0];
+                            $.ajax({
+                                url: '/Api/Delete',
+                                type: 'POST',
+                                dataType: 'text',
+                                data: { Path: version },
+                                success: function (data) {
+                                    term.resume();
+                                    if (data == '') {
+                                        term.echo('delete ' + version + ' finished.', {
+                                            finalize: function (div) {
+                                                div.css("color", "green");
+                                            }
+                                        });
+                                    }
+                                    else {
+                                        term.echo(data, {
+                                            finalize: function (div) {
+                                                div.css("color", "red");
+                                            }
+                                        });
+                                    }
+                                },
+                                error: function (xhr, status, e) {
+                                    term.resume();
+                                    term.echo(e, {
+                                        finalize: function (div) {
+                                            div.css("color", "red");
+                                        }
+                                    });
+                                }
+                            });
+                        }
                     } else {
                         term.echo('unknown api ' + command);
                     }
