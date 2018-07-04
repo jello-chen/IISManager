@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="publish"
+    targetNamespace="http://tempuri.org/publish.xsd"
+    elementFormDefault="qualified"
+    xmlns="http://tempuri.org/publish.xsd"
+    xmlns:mstns="http://tempuri.org/publish.xsd"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+>
+    <xs:element name="publish" type="publishType"></xs:element>
+    <xs:complexType name="publishType">
+        <xs:all>
+            <xs:element name="resources" type="resourcesType"></xs:element>
+            <xs:element name="operations" type="operationsType"></xs:element>
+        </xs:all>
+    </xs:complexType>
+    <xs:complexType name="resourcesType">
+        <xs:sequence>
+            <xs:element name="resource" type="resourceType" minOccurs="0" maxOccurs="unbounded"></xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="resourceType">
+        <xs:attribute name="path" type="xs:string"></xs:attribute>
+    </xs:complexType>
+    <xs:complexType name="operationsType">
+        <xs:sequence>
+            <xs:element name="operation" type="operationType" minOccurs="0" maxOccurs="unbounded"></xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="operationType">
+        <xs:sequence>
+            <xs:element name="scripts" type="scriptsType" minOccurs="0"></xs:element>
+        </xs:sequence>
+        <xs:attribute name="type" type="operationTypeType"></xs:attribute>
+        <xs:attribute name="src" type="xs:string" use="optional"></xs:attribute>
+        <xs:attribute name="target" type="xs:string" use="optional"></xs:attribute>
+        <xs:attribute name="isConfig" type="xs:boolean" use="optional" default="false"></xs:attribute>
+        <xs:attribute name="autoAdd" type="xs:boolean" use="optional" default="false"></xs:attribute>
+        <xs:attribute name="path" type="xs:string" use="optional"></xs:attribute>
+        <xs:attribute name="exclude" type="xs:string" use="optional"></xs:attribute>
+    </xs:complexType>
+    <xs:simpleType name="operationTypeType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="backup"></xs:enumeration>
+            <xs:enumeration value="replace"></xs:enumeration>
+            <xs:enumeration value="execute"></xs:enumeration>
+            <xs:enumeration value="delete"></xs:enumeration>
+            <xs:enumeration value="revert"></xs:enumeration>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:complexType name="scriptsType">
+        <xs:sequence>
+            <xs:element name="script" type="scriptType" minOccurs="0" maxOccurs="unbounded"></xs:element>
+            <xs:element name="group" type="scriptsType" minOccurs="0" maxOccurs="unbounded"></xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="scriptType">
+        <xs:attribute name="path" type="xs:string"></xs:attribute>
+        <xs:attribute name="database" type="xs:string"></xs:attribute>
+    </xs:complexType>
+</xs:schema>

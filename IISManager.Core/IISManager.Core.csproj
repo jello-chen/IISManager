@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BaseController.cs" />
+    <Compile Include="Configuration\GroupScript.cs" />
     <Compile Include="Configuration\Operation.cs" />
     <Compile Include="Configuration\OperationType.cs" />
     <Compile Include="Configuration\Publish.cs" />
@@ -85,7 +86,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="publish-doc.xsd">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="publish-doc.xml" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<publish xmlns="http://tempuri.org/publish.xsd">
+    <resources>
+        <resource path="1.txt"/>
+        <resource path="2.txt"/>
+    </resources>
+    <operations>
+        <operation type="revert"/>
+        <operation type="delete" path="1.txt"/>
+        <operation type="execute">
+            <scripts>
+                <script path="1.sql" database=""/>
+                <group>
+                    <script path="2.sql" database=""/>
+                    <script path="3.sql" database=""/>
+                </group>
+            </scripts>
+        </operation>
+    </operations>
+</publish>

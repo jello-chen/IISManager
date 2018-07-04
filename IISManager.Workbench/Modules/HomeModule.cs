@@ -58,7 +58,11 @@ namespace IISManager.Workbench.Modules
             {
                 if (!ZipUtil.IsZip(stream))
                     return Response.AsJson(new { success = false, message = "This is not zip file." });
-                if (ZipUtil.UnZip(stream, "Publish"))
+
+                if (Directory.Exists(Globals.UploadPath))
+                    Directory.Delete(Globals.UploadPath, true);
+
+                if (ZipUtil.UnZip(stream, Globals.UploadPath))
                 {
                     ExecuteOperations();
                     return Response.AsJson(new { success = true, message = string.Empty });

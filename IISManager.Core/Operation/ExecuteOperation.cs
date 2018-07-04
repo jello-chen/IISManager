@@ -36,14 +36,14 @@ namespace IISManager.Core
         {
             if (scripts == null || scripts.Count == 0) return string.Empty;
             ConcurrentBag<string> results = new ConcurrentBag<string>();
-            Task.WaitAll(scripts.Select(s => Task.Run(() =>
+            foreach (var script in scripts)
             {
-                string sp = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, s.Path);
-                string cs = regex.IsMatch(s.Database) ? s.Database : GetConnectionStringFromConfig(s.Database);
+                string sp = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, script.Path);
+                string cs = regex.IsMatch(script.Database) ? script.Database : GetConnectionStringFromConfig(script.Database);
                 string result = ExecuteScript(cs, sp);
                 if (!string.IsNullOrWhiteSpace(result))
                     results.Add(result);
-            })).ToArray());
+            }
             return results.Count == 0 ? string.Empty : string.Join("\n", results);
         }
 
